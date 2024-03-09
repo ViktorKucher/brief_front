@@ -18,7 +18,21 @@ export type FormType = {
     type_buy_project:string;
     opponents:string;
     opponents_details:string[];
-    geolocation:string
+    geolocation:string,
+    shortTask:string,
+    hostingNeed:string[],
+    domainNeed:string[],
+    needsAllSite:string,
+    typeSite:string[],
+    uiSite:string[],
+    logo:string[],
+    dataEnd:string,
+    money:string,
+    structureSite:string,
+    languages:string,
+    content:string,
+    seo:string,
+    different:string
   };
 export type FormInputType = {
   register:UseFormRegister<any>,

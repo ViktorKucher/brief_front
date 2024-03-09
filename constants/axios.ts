@@ -2,7 +2,7 @@ import axios from "axios";
 import { createQuestionBlank } from "./questions";
 
 export const INSTANCE_API = axios.create({
-  baseURL: "http://localhost:3003/api",
+  baseURL: `${process.env.NEXT_PUBLIC_SERVER_API}/api`,
 });
 export const getAllBriefs = () => INSTANCE_API.get("/brief");
 export const sendBriefs = (data: any) =>{

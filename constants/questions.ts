@@ -5,7 +5,7 @@ export const createQuestionBlank = (brief_content: any) => {
     arr.questions.push(...item.questions);
     return arr;
   });
-  return questions.map((item: { question: any; name: string | number; }) => {
+  return questions.map((item: { question: any; name: string | number }) => {
     return { question: item.question, answer: brief_content[item.name] };
   });
 };
@@ -144,6 +144,110 @@ export const listQuestion: QuestionListType[] = [
           add_different_question: false,
         },
       },
+    ],
+  },
+  {
+    name_block: "Важливі питання для оцінки вартості та термінів",
+    questions: [
+      {
+        name: "shortTask",
+        question:
+          "Опишіть коротко завдання. Що потрібно зробити? (Сайт з нуля; доопрацювання вже існуючого сайту; зміна структури сайту або ребрендинг тощо)",
+        type: "text",
+      },
+      {
+        name: "hostingNeed",
+        question: "Чи потрібний Вам хостинг для нового сайту?",
+        type: "radio",
+        variants: { elements: ["Так", "Ні"], add_different_question: true },
+      },
+      {
+        name: "domainNeed",
+        question: "Чи потрібний Вам домен для нового сайту?",
+        type: "radio",
+        variants: { elements: ["Так", "Ні"], add_different_question: true },
+      },
+      {
+        name: "needsAllSite",
+        question:
+          "Вам необхідна повна розробка сайту (дизайн, верстка + програмування) чи лише частина?",
+        type: "text",
+      },
+      {
+        name: "typeSite",
+        question: "Тип сайту",
+        type: "radio",
+        variants: {
+          elements: [
+            "Landing Page",
+            "Промо-сайт",
+            "Сайт візитка",
+            "Корпоративний/Каталог",
+            "Інтернет магазин",
+            "Портал",
+          ],
+          add_different_question: true,
+        },
+      },
+      {
+        name: "uiSite",
+        question: "Бажаний стиль сайту",
+        type: "radio",
+        variants: {
+          elements: [
+            "Європейський",
+            "Мінімалістичний",
+            "Діловий",
+            "Креативний",
+            "Портальний",
+          ],
+          add_different_question: true,
+        },
+      },
+      {
+        name: "logo",
+        question: "Чи є у Вас логотип/фірмовий стиль?",
+        type: "radio",
+        variants: { elements: ["Так", "Ні"], add_different_question: true },
+      },
+      {
+        name: "dataEnd",
+        question: " Чи є побажання щодо термінів? ",
+        type: "text",
+      },
+      {
+        name: "money",
+        question: " Який бюджет ? ",
+        type: "text",
+      },
+      {
+        name: "structureSite",
+        question: "Опишіть можливу структуру сайту?",
+        type: "checkbox",
+        variants: {
+          elements: ["Головна", "Про нас", "Послуги", "Каталог", "Новини"],
+          add_different_question: true,
+        },
+      },
+      {
+        name: "languages",
+        question: "Мовні версії сайту",
+        type: "text",
+      },
+    ],
+  },
+  {
+    name_block:
+      "Додаткові питання",
+    questions: [
+      {
+        name: "content",
+        type: "radio",
+        question:'Чи потрібно наповнення сайту контентом, чи Ви робитимете це самостійно? ',
+        variants: { elements: ["Так", "Ні"], add_different_question: true },
+      },
+      {name:'seo',question:' Чи плануєте Ви просувати сайт (SEO, SMM, РРС)? ',type:'radio',variants:{elements:['Так','Ні'],add_different_question:true}},
+      {name:'different',question:'Ваші коментарі, запитання, побажання ?',type:'text'}
     ],
   },
 ];
