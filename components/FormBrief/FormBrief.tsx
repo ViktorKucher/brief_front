@@ -13,6 +13,8 @@ import { FormType } from "../../types/form";
 import { listQuestion } from "@/constants/questions";
 import { FormElement } from "./FormElement";
 import { sendBriefs } from "@/constants/axios";
+import Link from "next/link";
+import { useRef } from "react";
 
 export const FormBrief = () => {
   const toast = useToast();
@@ -22,9 +24,10 @@ export const FormBrief = () => {
     register,
     formState: { errors, isSubmitting },
   } = useForm<FormType>();
+  const myRef = useRef<null | HTMLDivElement>(null)
   const onSubmit = async (values: any, e: any) => {
     e.preventDefault();
-    toast.promise(sendBriefs(values), {
+    toast.promise(sendBriefs(values).then(()=>{ myRef.current!=null && myRef.current.scrollIntoView() }), {
       success: { title: "Заявку надіслано", position: "bottom-left" },
       error: {
         title: "Помилка надсилання",
@@ -40,7 +43,8 @@ export const FormBrief = () => {
     reset();
   };
   return (
-    <Box paddingX={10}>
+    <Box paddingX={10} >
+      <Box display={'flex'} justifyContent={'right'} ref={myRef}><Button width={150} colorScheme='telegram'><Link href={'/admin'}>ADMIN PANEL</Link></Button></Box>
       <Heading as={'h1'} size='2xl' textAlign={'center'}>Бриф</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         {listQuestion.map(({ name_block, questions }, key) => {

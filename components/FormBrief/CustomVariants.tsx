@@ -21,7 +21,7 @@ export const CustomVariants = ({
   const handleChange = (value: string | number) => setValue(+value);
   return (
     <Box>
-      <NumberInput min={3} max={6} value={value} onChange={handleChange}>
+      <NumberInput width={100} min={3} max={6} value={value} onChange={handleChange}>
         <NumberInputField />
         <NumberInputStepper>
           <NumberIncrementStepper />

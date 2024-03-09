@@ -24,16 +24,18 @@ export const FormElement = ({
 }) => {
   switch (type) {
     case "checkbox":
-      <CheckboxGroup>
-        {variants?.elements.map((item, index) => (
+      return <CheckboxGroup>
+        <Stack direction={"column"}>
+          {variants?.elements.map((item, index) => (
           <Checkbox
             key={index}
             value={item}
-            {...register(name, { required: true })}
-          ></Checkbox>
+            {...register(name,{required:true})}
+          >{item}</Checkbox>
         ))}
+        </Stack>
+        
       </CheckboxGroup>;
-      return;
     case "number":
       return (
         <CustomVariants
@@ -46,7 +48,7 @@ export const FormElement = ({
         <RadioGroup>
           <Stack direction={"column"}>
             {variants?.elements.map((item, index) => (
-              <Radio key={index} value={item} {...register(name)}>
+              <Radio key={index} value={item} {...register(name,{required:true})}>
                 {item}
               </Radio>
             ))}
@@ -62,6 +64,7 @@ export const FormElement = ({
           mask={"+**(***) ***-**-**"}
           placeholder="Ваша відповідь"
           {...register(name, {
+            required:true,
             pattern: {
               value: /^[+]\d\d[(]\d\d\d[)] \d\d\d[-]\d\d[-]\d\d/,
               message: "Потрібно використовувати тільки цифри",
@@ -71,7 +74,7 @@ export const FormElement = ({
       );
     case "text":
       return (
-        <Input type={"text"} placeholder="Ваша відповідь" {...register(name)} />
+        <Input type={"text"} placeholder="Ваша відповідь" {...register(name,{required:true})} />
       );
   }
 };
