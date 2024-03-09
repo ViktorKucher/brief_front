@@ -42,7 +42,6 @@ export const DetailsModal = ({
               <Tr>
                 <Th fontSize={"xl"}>Question</Th>
                 <Th fontSize={"xl"}>Answer</Th>
-                <Th fontSize={"xl"}>Change</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -63,7 +62,6 @@ export const DetailsModal = ({
                         </>
                       )}
                     </Td>
-                    <Td><Button colorScheme='red' ><EditIcon/></Button></Td>
                   </Tr>
                 );
               })}
