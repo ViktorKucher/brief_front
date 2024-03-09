@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { DetailsModal } from "./DetailsModal";
 import { createPDF } from "@/constants/pdf";
+import { CircularProgress } from '@chakra-ui/react'
 
 export const AdminPage = () => {
   const [isAuthorize, setIsAuthorize] = useState(false);
@@ -42,10 +43,10 @@ export const AdminPage = () => {
           brief_content: { question: string; answer: string }[];
         }[];
       }) => {
-        console.log(data);
         setBlanks(data);
+        setIsAuthorize(true)
       }
-    );
+    ).catch(()=>setIsAuthorize(false));
   }, []);
   const onClick = (id: string) => {
     setData(blanks?.find((item) => item.id === id));
@@ -69,7 +70,9 @@ export const AdminPage = () => {
       }
     );
   };
-
+if(!isAuthorize){
+  return <CircularProgress isIndeterminate color='green.300' />
+}
   return (
     <>
       <Box padding={10}>
