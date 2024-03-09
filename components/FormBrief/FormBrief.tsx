@@ -24,28 +24,41 @@ export const FormBrief = () => {
     register,
     formState: { errors, isSubmitting },
   } = useForm<FormType>();
-  const myRef = useRef<null | HTMLDivElement>(null)
+  const myRef = useRef<null | HTMLDivElement>(null);
   const onSubmit = async (values: any, e: any) => {
     e.preventDefault();
-    toast.promise(sendBriefs(values).then(()=>{ myRef.current!=null && myRef.current.scrollIntoView() }), {
-      success: { title: "Заявку надіслано", position: "bottom-left" },
-      error: {
-        title: "Помилка надсилання",
-        duration: 1000,
-        position: "bottom-left",
-      },
-      loading: {
-        title: "Заявка відправляється",
-        duration: 1000,
-        position: "bottom-left",
-      },
-    });
+    toast.promise(
+      sendBriefs(values).then(() => {
+        myRef.current != null && myRef.current.scrollIntoView();
+      }),
+      {
+        success: { title: "Заявку надіслано", position: "bottom-left" },
+        error: {
+          title: "Помилка надсилання",
+          duration: 1000,
+          position: "bottom-left",
+        },
+        loading: {
+          title: "Заявка відправляється",
+          duration: 1000,
+          position: "bottom-left",
+        },
+      }
+    );
     reset();
   };
   return (
-    <Box paddingX={10} >
-      <Box display={'flex'} justifyContent={'right'} ref={myRef}><Button width={150} colorScheme='telegram'><Link href={'/admin'}>ADMIN PANEL</Link></Button></Box>
-      <Heading as={'h1'} size='2xl' textAlign={'center'}>Бриф</Heading>
+    <Box paddingX={10}>
+      <Box display={"flex"} justifyContent={"right"} ref={myRef}>
+        <Link href={"/admin"}>
+          <Button width={150} colorScheme="telegram">
+            ADMIN PANEL
+          </Button>
+        </Link>
+      </Box>
+      <Heading as={"h1"} size="2xl" textAlign={"center"}>
+        Бриф
+      </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         {listQuestion.map(({ name_block, questions }, key) => {
           return (
@@ -55,7 +68,9 @@ export const FormBrief = () => {
               flexDirection={"column"}
               marginBottom={4}
             >
-              <Heading as={'h2'} size='xl' marginBottom={3}>{name_block}</Heading>
+              <Heading as={"h2"} size="xl" marginBottom={3}>
+                {name_block}
+              </Heading>
               {questions.map((item, index) => {
                 return (
                   <FormControl
@@ -63,7 +78,9 @@ export const FormBrief = () => {
                     isInvalid={errors[item.name] && true}
                     marginBottom={2}
                   >
-                    <FormLabel fontSize="lg" marginBottom={1}>{item.question}</FormLabel>
+                    <FormLabel fontSize="lg" marginBottom={1}>
+                      {item.question}
+                    </FormLabel>
                     <FormElement
                       key={index}
                       register={register}
