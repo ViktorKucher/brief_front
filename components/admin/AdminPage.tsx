@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { DetailsModal } from "./DetailsModal";
 import { createPDF } from "@/constants/pdf";
-import { CircularProgress } from '@chakra-ui/react'
+import { CircularProgress } from "@chakra-ui/react";
 
 export const AdminPage = () => {
   const [isAuthorize, setIsAuthorize] = useState(false);
@@ -34,19 +34,21 @@ export const AdminPage = () => {
     }[]
   >();
   useEffect(() => {
-    getAllBriefs().then(
-      ({
-        data,
-      }: {
-        data: {
-          id: string;
-          brief_content: { question: string; answer: string }[];
-        }[];
-      }) => {
-        setBlanks(data);
-        setIsAuthorize(true)
-      }
-    ).catch(()=>setIsAuthorize(false));
+    getAllBriefs()
+      .then(
+        ({
+          data,
+        }: {
+          data: {
+            id: string;
+            brief_content: { question: string; answer: string }[];
+          }[];
+        }) => {
+          setBlanks(data);
+          setIsAuthorize(true);
+        }
+      )
+      .catch(() => setIsAuthorize(false));
   }, []);
   const onClick = (id: string) => {
     setData(blanks?.find((item) => item.id === id));
@@ -57,22 +59,25 @@ export const AdminPage = () => {
     data && createPDF(data);
   };
   const deleteButton = (id: string) => {
-    deleteBrief(id).then(
-      ({
-        data,
-      }: {
-        data: {
-          id: string;
-          brief_content: { question: string; answer: string }[];
-        }[];
-      }) => {
-        setBlanks(data);
-      }
-    );
+    deleteBrief(id)
+      .then(
+        ({
+          data,
+        }: {
+          data: {
+            id: string;
+            brief_content: { question: string; answer: string }[];
+          }[];
+        }) => {
+          setBlanks(data);
+          setIsAuthorize(true);
+        }
+      )
+      .catch(() => setIsAuthorize(false));
   };
-if(!isAuthorize){
-  return <CircularProgress isIndeterminate color='green.300' />
-}
+  if (!isAuthorize) {
+    return <CircularProgress isIndeterminate color="green.300" />;
+  }
   return (
     <>
       <Box padding={10}>
@@ -124,5 +129,5 @@ if(!isAuthorize){
         <DetailsModal isOpen={isOpen} onClose={onClose} data={data} />
       </Box>
     </>
-  )
+  );
 };
