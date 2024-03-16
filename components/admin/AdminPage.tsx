@@ -58,8 +58,8 @@ export const AdminPage = () => {
     const data = blanks?.find((item) => item.id === id)?.brief_content;
     data && createPDF(data);
   };
-  const deleteButton = async (id: string) => {
-    await deleteBrief(id)
+  const deleteButton = (id: string) => {
+    deleteBrief(id)
       .then(
         ({
           data,
