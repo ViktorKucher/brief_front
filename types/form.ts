@@ -36,6 +36,7 @@ export type FormType = {
   };
 export type FormInputType = {
   register:UseFormRegister<any>,
+  required:boolean,
   errors:FieldErrors<FormType>,
   question: QuestionType;
   control:Control<FormType, any, any>;
@@ -48,6 +49,7 @@ export type QuestionVariants = {
 export type QuestionType = {
   name: keyof FormType;
   question: string;
+  required:boolean,
   type: "checkbox" | "radio" | "tel" | "text" | "number";
   variants?: QuestionVariants;
 };

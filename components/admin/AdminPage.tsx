@@ -58,8 +58,8 @@ export const AdminPage = () => {
     const data = blanks?.find((item) => item.id === id)?.brief_content;
     data && createPDF(data);
   };
-  const deleteButton = (id: string) => {
-    deleteBrief(id)
+  const deleteButton = async (id: string) => {
+    await deleteBrief(id)
       .then(
         ({
           data,
@@ -73,7 +73,7 @@ export const AdminPage = () => {
           setIsAuthorize(true);
         }
       )
-      .catch(() => setIsAuthorize(false));
+      .catch(() => setIsAuthorize(true));
   };
   if (!isAuthorize) {
     return <CircularProgress isIndeterminate color="green.300" />;

@@ -1,4 +1,5 @@
 import { QuestionListType } from "@/types/form";
+import { truncate } from "fs/promises";
 
 export const createQuestionBlank = (brief_content: any) => {
   const { questions } = listQuestion.reduce((arr, item) => {
@@ -17,18 +18,26 @@ export const listQuestion: QuestionListType[] = [
         name: "name_customer",
         question: "Вкажіть, як ми можемо до Вас звертатися",
         type: "text",
+        required: true,
       },
-      { name: "phone_customer", question: "Номер телефону", type: "tel" },
+      {
+        name: "phone_customer",
+        question: "Номер телефону",
+        type: "tel",
+        required: true,
+      },
       {
         name: "messager_customer",
         question:
           "Зручний спосіб зв'язку: e-mail або будь-який месенджер (Skype, Viber, Telegram, WhatsApp)",
         type: "text",
+        required: false,
       },
       {
         name: "time_to_speak",
         question: "Зручний період для спілкування",
         type: "text",
+        required: false,
       },
     ],
   },
@@ -37,29 +46,25 @@ export const listQuestion: QuestionListType[] = [
     questions: [
       {
         name: "name_project",
-        question: "Назва Вашого проекту (існуючий чи майбутній)",
+        question: "Назва Вашого проекту",
         type: "text",
-      },
-      {
-        name: "idea_project",
-        question: "Суть бренду (основна ідея чи місія Вашого продукту)",
-        type: "text",
+        required: true,
       },
       {
         name: "unique_selling_proposition",
-        question: "Унікальна торгова пропозиція (УТП) товару",
-        type: "text",
-      },
-      {
-        name: "value_of_the_product",
-        question: "Назвіть щонайменше три основні цінності продукту",
-        type: "text",
-      },
-      {
-        name: "benefit_value_of_the_product",
-        question:
-          "Яку вигоду споживачеві дає кожна з наведених вище цінностей?",
-        type: "text",
+        question: "Яку головну ціль має виконувати сайт ?",
+        type: "radio",
+        variants: {
+          elements: [
+            "Надання інформації про компанію та послуги",
+            "Генерація потенційних клієнтів",
+            "Використання як вітрини для товарів",
+            "Організація подій",
+            "Прямі продажі",
+          ],
+          add_different_question: true,
+        },
+        required: true,
       },
     ],
   },
@@ -69,14 +74,16 @@ export const listQuestion: QuestionListType[] = [
       {
         name: "project_clients",
         question:
-          " Які групи споживачів користуватимуться Вашим продуктом найчастіше?",
+          "Які групи споживачів користуватимуться Вашим продуктом найчастіше?",
         type: "text",
+        required: true,
       },
       {
         name: "info_project_clients",
         question:
           "Опишіть їх за наступними параметрами або у вільній формі (насамперед опишіть найчисленнішу групу – ядро цільової аудиторії):",
-        type: "number",
+        type: "text",
+        required: false,
       },
     ],
   },
@@ -87,17 +94,13 @@ export const listQuestion: QuestionListType[] = [
         name: "why_site_need",
         question: "Навіщо Ваш сайт потрібен споживачеві?",
         type: "text",
-      },
-      {
-        name: "time_use_site",
-        question:
-          "Коли і як споживач користуватиметься Вашим сайтом найчастіше?",
-        type: "text",
+        required: true,
       },
       {
         name: "type_site",
         question: "Чи Ваш продукт є звичним для споживача?",
         type: "radio",
+        required: false,
         variants: {
           elements: [
             "Продукт інноваційний та споживача необхідний привчити для його споживання.",
@@ -112,6 +115,7 @@ export const listQuestion: QuestionListType[] = [
         question:
           "Якою покупкою є Ваш продукт для споживача: простий чи складний? (Вкажіть ланцюжок дій споживача від бажання купити продукт даної категорії до безпосередньо придбання товару)",
         type: "text",
+        required: false,
       },
     ],
   },
@@ -120,15 +124,15 @@ export const listQuestion: QuestionListType[] = [
     questions: [
       {
         name: "opponents",
-        question:
-          "Сайти конкурентів (Вкажіть щонайменше три посилання на сайти Ваших конкурентів):",
+        question: "Вкажіть сайти ваших прямих конкурентів",
         type: "text",
+        required: false,
       },
       {
         name: "opponents_details",
-        question:
-          "По можливості, опишіть 3 Ваші основні конкуренти за наступними параметрами:назва; сильні сторони конкурента щодо Вашого продукту/бренду; слабкі сторони конкурента щодо Вашого продукту/бренду; позиціонування та УТП конкурента; цінності товару/бренду конкурента; як довго конкурент знаходиться на ринку; частка у % споживання продукту конкурента щодо всього обсягу ринку",
-        type: "number",
+        question: "Вкажіть їх переваги та недоліки?",
+        type: "text",
+        required: false,
       },
     ],
   },
@@ -139,6 +143,7 @@ export const listQuestion: QuestionListType[] = [
         name: "geolocation",
         question: "Вкажіть на яку геолокацію буде спрямовано Ваш продукт",
         type: "radio",
+        required: false,
         variants: {
           elements: ["Міжнародний", "Федеральний", "Регіональний", "Місцевий"],
           add_different_question: false,
@@ -151,32 +156,46 @@ export const listQuestion: QuestionListType[] = [
     questions: [
       {
         name: "shortTask",
+        question: "Що потрібно зробити (коротке завдання)?",
+        type: "radio",
+        variants: {
+          elements: [
+            "Сайт з нуля",
+            "Доопрацювання вже існуючого сайту",
+            "Зміна структури сайту",
+            "Ребрендинг",
+          ],
+          add_different_question: true,
+        },
+        required: true,
+      },
+      {
+        name: "needsAllSite",
         question:
-          "Опишіть коротко завдання. Що потрібно зробити? (Сайт з нуля; доопрацювання вже існуючого сайту; зміна структури сайту або ребрендинг тощо)",
-        type: "text",
+          "Вам необхідна повна розробка сайту (дизайн, верстка + програмування)?",
+        type: "radio",
+        variants: { elements: ["Так", "Ні"], add_different_question: true },
+        required: false,
       },
       {
         name: "hostingNeed",
         question: "Чи потрібний Вам хостинг для нового сайту?",
         type: "radio",
         variants: { elements: ["Так", "Ні"], add_different_question: true },
+        required: false,
       },
       {
         name: "domainNeed",
         question: "Чи потрібний Вам домен для нового сайту?",
         type: "radio",
         variants: { elements: ["Так", "Ні"], add_different_question: true },
-      },
-      {
-        name: "needsAllSite",
-        question:
-          "Вам необхідна повна розробка сайту (дизайн, верстка + програмування) чи лише частина?",
-        type: "text",
+        required: false,
       },
       {
         name: "typeSite",
         question: "Тип сайту",
         type: "radio",
+        required: true,
         variants: {
           elements: [
             "Landing Page",
@@ -193,6 +212,7 @@ export const listQuestion: QuestionListType[] = [
         name: "uiSite",
         question: "Бажаний стиль сайту",
         type: "radio",
+        required: true,
         variants: {
           elements: [
             "Європейський",
@@ -208,22 +228,26 @@ export const listQuestion: QuestionListType[] = [
         name: "logo",
         question: "Чи є у Вас логотип/фірмовий стиль?",
         type: "radio",
+        required: false,
         variants: { elements: ["Так", "Ні"], add_different_question: true },
       },
       {
         name: "dataEnd",
         question: " Чи є побажання щодо термінів? ",
         type: "text",
+        required: false,
       },
       {
         name: "money",
         question: " Який бюджет ? ",
         type: "text",
+        required: false,
       },
       {
         name: "structureSite",
         question: "Опишіть можливу структуру сайту?",
         type: "checkbox",
+        required: true,
         variants: {
           elements: ["Головна", "Про нас", "Послуги", "Каталог", "Новини"],
           add_different_question: true,
@@ -231,23 +255,40 @@ export const listQuestion: QuestionListType[] = [
       },
       {
         name: "languages",
-        question: "Мовні версії сайту",
-        type: "text",
+        question: "Ваш сайт має бути однією мовою чи потрібна багатомовність?",
+        type: "radio",
+        variants: {
+          elements: ["Одна мова", "Багатомовність"],
+          add_different_question: true,
+        },
+        required: true,
       },
     ],
   },
   {
-    name_block:
-      "Додаткові питання",
+    name_block: "Додаткові питання",
     questions: [
       {
         name: "content",
         type: "radio",
-        question:'Чи потрібно наповнення сайту контентом, чи Ви робитимете це самостійно? ',
+        required: false,
+        question:
+          "Чи потрібно наповнення сайту контентом ? ",
         variants: { elements: ["Так", "Ні"], add_different_question: true },
       },
-      {name:'seo',question:' Чи плануєте Ви просувати сайт (SEO, SMM, РРС)? ',type:'radio',variants:{elements:['Так','Ні'],add_different_question:true}},
-      {name:'different',question:'Ваші коментарі, запитання, побажання ?',type:'text'}
+      {
+        name: "seo",
+        question: " Чи плануєте Ви просувати сайт (SEO, SMM, РРС)? ",
+        type: "radio",
+        required: false,
+        variants: { elements: ["Так", "Ні"], add_different_question: true },
+      },
+      {
+        name: "different",
+        required: false,
+        question: "Ваші коментарі, запитання, побажання ?",
+        type: "text",
+      },
     ],
   },
 ];

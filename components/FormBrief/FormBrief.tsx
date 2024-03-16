@@ -6,6 +6,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
@@ -80,6 +81,7 @@ export const FormBrief = () => {
                   >
                     <FormLabel fontSize="lg" marginBottom={1}>
                       {item.question}
+                      <Text as={'span'} color={'red'}>{item.required && "*"}</Text>
                     </FormLabel>
                     <FormElement
                       key={index}
@@ -87,6 +89,7 @@ export const FormBrief = () => {
                       type={item.type}
                       name={item.name}
                       variants={item.variants}
+                      required={item.required}
                     />
                     <FormErrorMessage>
                       {errors[item.name] && errors[item.name]?.message}

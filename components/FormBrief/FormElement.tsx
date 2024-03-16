@@ -16,42 +16,54 @@ export const FormElement = ({
   variants,
   name,
   type,
+  required,
 }: {
   name: string;
   type: "checkbox" | "radio" | "tel" | "text" | "number";
   register: UseFormRegister<any>;
   variants?: QuestionVariants;
+  required: boolean;
 }) => {
   switch (type) {
     case "checkbox":
-      return <CheckboxGroup>
-        <Stack direction={"column"}>
-          {variants?.elements.map((item, index) => (
-          <Checkbox
-            key={index}
-            value={item}
-            {...register(name,{required:true})}
-          >{item}</Checkbox>
-        ))}
-        </Stack>
-        
-      </CheckboxGroup>;
-    case "number":
       return (
-        <CustomVariants
-          register={register}
-          name={name}
-        />
+        <CheckboxGroup>
+          <Stack direction={"column"}>
+            {variants?.elements.map((item, index) => (
+              <Checkbox
+                key={index}
+                value={item}
+                {...register(name, { required })}
+              >
+                {item}
+              </Checkbox>
+            ))}
+          </Stack>
+        </CheckboxGroup>
       );
+    case "number":
+      return <CustomVariants register={register} name={name} />;
     case "radio":
       return (
         <RadioGroup>
           <Stack direction={"column"}>
             {variants?.elements.map((item, index) => (
-              <Radio key={index} value={item} {...register(name,{required:true})}>
+              <Radio key={index} value={item} {...register(name, { required })}>
                 {item}
               </Radio>
             ))}
+            {variants?.add_different_question && (
+              <>
+                <Radio value={"different"}>
+                  Інше
+                </Radio>
+                <Input
+                  type={"text"}
+                  placeholder="Ваша відповідь"
+                  {...register(name, { required })}
+                />
+              </>
+            )}
           </Stack>
         </RadioGroup>
       );
@@ -64,7 +76,7 @@ export const FormElement = ({
           mask={"+**(***) ***-**-**"}
           placeholder="Ваша відповідь"
           {...register(name, {
-            required:true,
+            required,
             pattern: {
               value: /^[+]\d\d[(]\d\d\d[)] \d\d\d[-]\d\d[-]\d\d/,
               message: "Потрібно використовувати тільки цифри",
@@ -74,7 +86,11 @@ export const FormElement = ({
       );
     case "text":
       return (
-        <Input type={"text"} placeholder="Ваша відповідь" {...register(name,{required:true})} />
+        <Input
+          type={"text"}
+          placeholder="Ваша відповідь"
+          {...register(name, { required })}
+        />
       );
   }
 };
