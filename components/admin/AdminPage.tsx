@@ -73,7 +73,10 @@ export const AdminPage = () => {
           setIsAuthorize(true);
         }
       )
-      .catch(() => setIsAuthorize(true));
+      .catch((e) => {
+        console.log(e);
+        setIsAuthorize(true);
+      });
   };
   if (!isAuthorize) {
     return <CircularProgress isIndeterminate color="green.300" />;
