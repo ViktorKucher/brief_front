@@ -6,7 +6,7 @@ const nextConfig = {
     externalResolver: true,
   },
   env: {
-    NEXT_PUBLIC_SERVER_API: "https://brief-backend.vercel.app",
+    NEXT_PUBLIC_SERVER_API: "https://brief-viktorkucher.vercel.app",
   },
   async rewrites() {
     return [
