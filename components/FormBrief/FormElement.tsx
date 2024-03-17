@@ -1,4 +1,4 @@
-import { UseFormRegister } from "react-hook-form";
+import { FormState, UseFormRegister, UseFormSetValue, UseFormUnregister } from "react-hook-form";
 import { CustomVariants } from "./CustomVariants";
 import {
   Checkbox,
@@ -10,20 +10,28 @@ import {
 } from "@chakra-ui/react";
 import InputMask from "react-input-mask";
 import { QuestionVariants } from "@/types/form";
+import { useState } from "react";
+import { useHookFormMask } from 'use-mask-input';
 
 export const FormElement = ({
+  setValue,
   register,
   variants,
   name,
   type,
   required,
+  unregister
 }: {
   name: string;
   type: "checkbox" | "radio" | "tel" | "text" | "number";
   register: UseFormRegister<any>;
   variants?: QuestionVariants;
   required: boolean;
+  setValue: UseFormSetValue<any>;
+  unregister: UseFormUnregister<any>
 }) => {
+  const [active, setActive] = useState<boolean>(false);
+  const registerWithMask = useHookFormMask(register);
   switch (type) {
     case "checkbox":
       return (
@@ -48,20 +56,37 @@ export const FormElement = ({
         <RadioGroup>
           <Stack direction={"column"}>
             {variants?.elements.map((item, index) => (
-              <Radio key={index} value={item} {...register(name, { required })}>
+              <Radio
+                key={index}
+                value={item}
+                {...register(name, { required })}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    unregister(name)
+                    setActive(false);
+                    register(name)
+                  }
+                }}
+              >
                 {item}
               </Radio>
             ))}
             {variants?.add_different_question && (
               <>
-                <Radio value={"different"}>
+                <Radio
+                  value={"different"}
+                  onChange={(e) => e.target.checked && setActive(true)}
+                >
                   Інше
                 </Radio>
-                <Input
-                  type={"text"}
-                  placeholder="Ваша відповідь"
-                  {...register(name, { required })}
-                />
+                {active && (
+                  <Input
+                    type={"text"}
+                    placeholder="Ваша відповідь"
+                    {...register(name, { required })}
+                    onChange={(e) => setValue(name, e.target.value)}
+                  />
+                )}
               </>
             )}
           </Stack>
@@ -70,17 +95,11 @@ export const FormElement = ({
     case "tel":
       return (
         <Input
-          type={"tel"}
-          as={InputMask}
-          maskChar={null}
-          mask={"+**(***) ***-**-**"}
+          type={"text"}
           placeholder="Ваша відповідь"
-          {...register(name, {
+          {...registerWithMask(name,['+**(***) ***-**-**'], {
             required,
-            pattern: {
-              value: /^[+]\d\d[(]\d\d\d[)] \d\d\d[-]\d\d[-]\d\d/,
-              message: "Потрібно використовувати тільки цифри",
-            },
+            minLength:{value:18,message:'Мінімальна довжина'}
           })}
         />
       );
@@ -88,8 +107,9 @@ export const FormElement = ({
       return (
         <Input
           type={"text"}
-          placeholder="Ваша відповідь"
           {...register(name, { required })}
+          placeholder="Ваша відповідь"
+          
         />
       );
   }

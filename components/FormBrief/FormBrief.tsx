@@ -15,7 +15,7 @@ import { listQuestion } from "@/constants/questions";
 import { FormElement } from "./FormElement";
 import { sendBriefs } from "@/constants/axios";
 import Link from "next/link";
-import { useRef } from "react";
+import { ReactHTMLElement, useEffect, useRef } from "react";
 
 export const FormBrief = () => {
   const toast = useToast();
@@ -23,6 +23,9 @@ export const FormBrief = () => {
     reset,
     handleSubmit,
     register,
+    setValue,
+    setFocus,
+    unregister,
     formState: { errors, isSubmitting },
   } = useForm<FormType>();
   const myRef = useRef<null | HTMLDivElement>(null);
@@ -48,6 +51,13 @@ export const FormBrief = () => {
     );
     reset();
   };
+  const inputElement = useRef<any>(null);
+
+  useEffect(() => {
+    if (inputElement.current) {
+      inputElement.current.focus();
+    }
+  }, [inputElement.current]);
   return (
     <Box paddingX={10}>
       <Box display={"flex"} justifyContent={"right"} ref={myRef}>
@@ -78,6 +88,7 @@ export const FormBrief = () => {
                     key={index}
                     isInvalid={errors[item.name] && true}
                     marginBottom={2}
+                    ref={inputElement}
                   >
                     <FormLabel fontSize="lg" marginBottom={1}>
                       {item.question}
@@ -90,6 +101,9 @@ export const FormBrief = () => {
                       name={item.name}
                       variants={item.variants}
                       required={item.required}
+                      setValue={setValue}
+                      unregister={unregister}
+                      
                     />
                     <FormErrorMessage>
                       {errors[item.name] && errors[item.name]?.message}
