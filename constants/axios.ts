@@ -10,8 +10,4 @@ export const sendBriefs = (data: any) => {
   return INSTANCE_API.post("/brief", { brief_content });
 };
 export const deleteBrief = (id: string) =>
-  INSTANCE_API.delete(`/brief/`, {
-    params: {
-      id,
-    },
-  });
+  INSTANCE_API.delete(`/brief/${id}`,{headers:{}});
